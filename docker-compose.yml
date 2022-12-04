@@ -9,28 +9,36 @@ services:
          - my_network
       volumes:
          - ./client:/app
+      depends_on:
+         - backend
 
    backend:
       build: ./backend
       container_name: shop_backend
       ports:
          - "3001:3001"
+      stdin_open: true
       environment: 
          - DB_URL=mongodb://database/yolomy
       networks:
          - my_network
       volumes:
          - ./client:/app
-
-   database:
-      image: mongo:4.0-xenial
+      depends_on:
+         - mongo
+   mongo:
+      container_name: mongo
+      image: mongo
       ports:
          - 27017:27017
       volumes:
          - yolo:/data/db
+      networks:
+         - my_network
 
 volumes:
    yolo:
 
 networks:
    my_network:
+      driver: bridge
