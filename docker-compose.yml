@@ -1,24 +1,36 @@
-version: '1.0'
+version: "3.8"
 services:
-  client:
-    build: ./client
-    container_name: shop_frontend
-    ports: 
-       - 3000:80
-    networks:
-       - my_network
-    volumes:
-       - ./client:/app
+   frontend:
+      build: ./client
+      container_name: shop_frontend
+      ports:
+         - "3000:80"
+      networks:
+         - my_network
+      volumes:
+         - ./client:/app
 
-  backend:
-    build: ./backend
-    container_name: shop_backend
-    ports: 
-       - 3001:3001
-    networks:
-       - my_network
-    volumes:
-       - ./client:/app
+   backend:
+      build: ./backend
+      container_name: shop_backend
+      ports:
+         - "3001:3001"
+      environment: 
+         - DB_URL=mongodb://database/yolomy
+      networks:
+         - my_network
+      volumes:
+         - ./client:/app
+
+   database:
+      image: mongo:4.0-xenial
+      ports:
+         - 27017:27017
+      volumes:
+         - yolo:/data/db
+
+volumes:
+   yolo:
 
 networks:
    my_network:
