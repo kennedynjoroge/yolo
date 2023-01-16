@@ -1,0 +1,23 @@
+  - name: YoloPlaybook
+    hosts: all
+    become: yes
+    
+    tasks:
+    #Installations
+      - name: Git Installation
+        include_role:
+          name: git
+
+      - name: Docker installation
+        include_role:
+          name: docker  
+    #Code Setups
+      - name: Navigate git branch
+        git:
+          repo: "https://github.com/kennedynjoroge/yolo"
+          state: "/opt/yolo"
+      - name: Container setup
+        include_role:
+          name: docker-compose
+
+  
